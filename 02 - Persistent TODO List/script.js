@@ -2,6 +2,11 @@ const listsContainer = document.querySelector('[data-lists]')
 const newListForm = document.querySelector('[data-new-list-form]')
 const newListInput = document.querySelector('[data-new-list-input]')
 const deleteListButtton = document.querySelector('[data-delete-list-button]') 
+const listDisplayContainer = document.querySelector('[data-list-display-container]')
+const listTitleElement = document.querySelector('[data-list-title]')
+const listCountElement = document.querySelector('[data-list-count]')
+const tasksContainer = document.querySelector('[data-tasks]')
+
 
 const LOCAL_STORAGE_LIST_KEY = 'task.lists'
 const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.SelectedListId'
@@ -51,6 +56,25 @@ function save(){
 // Creates a new list entry based on the data from the lists array above
 function render() {
     clearElement(listsContainer)
+    renderLists()
+    const selectedList = lists.find(list => list.id === selectedListId) //finds the id of the selected list
+    if (selectedListId === null) {
+        listDisplayContainer.style.display = 'none' 
+    }
+    else{
+        listDisplayContainer.style.display = '' 
+        listTitleElement.innerText = selectedList.name //sets the title to the name of the selected list
+        // listCountElement.innerText = selectedList.tasks
+        renderTaskCount(selectedList)
+    }
+      
+}function renderTaskCount(selectedList){
+    const incompleteTasksCount = selectedList.tasks.filter(task => !task.complete).length
+    const taskString = incompleteTasksCount === 1 ? "task" : "tasks"
+    listCountElement.innerText = `${incompleteTasksCount} ${taskString} left`
+}
+
+function renderLists() {
     lists.forEach(list =>{
         const listElement = document.createElement('li')
         listElement.dataset.listId = list.id
@@ -60,9 +84,8 @@ function render() {
             listElement.classList.add('active-list')
         }
         listsContainer.appendChild(listElement) 
-    })   
+    }) 
 }
-
 // Clears any existing inputs
 function clearElement(element){
     while(element.firstChild){
