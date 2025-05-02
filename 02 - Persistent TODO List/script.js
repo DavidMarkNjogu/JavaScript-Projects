@@ -9,6 +9,7 @@ const tasksContainer = document.querySelector('[data-tasks]')
 const taskTemplate = document.getElementById('task-template')
 const newTaskForm = document.querySelector('[data-new-task-form]')
 const newTaskInput = document.querySelector('[data-new-task-input]')
+const clearCompleteTasksButton = document.querySelector('[data-clear-complete-tasks-button]')
 
 const LOCAL_STORAGE_LIST_KEY = 'task.lists'
 const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.SelectedListId'
@@ -31,6 +32,13 @@ tasksContainer.addEventListener('click' , e =>{
         renderTaskCount(selectedList)
     }
 })
+
+clearCompleteTasksButton.addEventListener('click', e =>{
+    const selectedList = lists.find(list => list.id === selectedListId)
+    selectedList.tasks = selectedList.tasks.filter(task => !task.complete)
+    saveAndRender()
+})
+
 
 deleteListButtton.addEventListener('click', e =>{
     lists = lists.filter(list => list.id !== selectedListId)
@@ -147,5 +155,13 @@ function renderTasks(){
     tasks.forEach(task =>{
         const taskElement = document.createElement('label')
     })
+
+    // clearCompleteTasksButton.addEventListener('click', e =>{
+//     const selectedList = lists.find(list =>list.id === selectedListId)
+//     const isTaskComplete = selectedList.tasks.find(task =>tasks.complete === true)
+//     selectedList.tasks.pop(isTaskComplete)
+//     save()
+
+// })
 
 } */
