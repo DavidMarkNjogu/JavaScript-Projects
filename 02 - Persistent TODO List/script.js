@@ -6,7 +6,7 @@ const listDisplayContainer = document.querySelector('[data-list-display-containe
 const listTitleElement = document.querySelector('[data-list-title]')
 const listCountElement = document.querySelector('[data-list-count]')
 const tasksContainer = document.querySelector('[data-tasks]')
-
+const taskTemplate = document.getElementById('task-template')
 
 const LOCAL_STORAGE_LIST_KEY = 'task.lists'
 const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.SelectedListId'
@@ -57,6 +57,7 @@ function save(){
 function render() {
     clearElement(listsContainer)
     renderLists()
+   
     const selectedList = lists.find(list => list.id === selectedListId) //finds the id of the selected list
     if (selectedListId === null) {
         listDisplayContainer.style.display = 'none' 
@@ -64,11 +65,26 @@ function render() {
     else{
         listDisplayContainer.style.display = '' 
         listTitleElement.innerText = selectedList.name //sets the title to the name of the selected list
-        // listCountElement.innerText = selectedList.tasks
         renderTaskCount(selectedList)
-    }
-      
-}function renderTaskCount(selectedList){
+        clearElement(tasksContainer)
+        renderTasks(selectedList)
+    }   
+}
+
+function renderTasks(selectedList){
+    selectedList.tasks.forEach( task =>{
+        const taskElement = document.importNode(taskTemplate.content , true)
+        const checkbox = taskElement.querySelector('input')
+        checkbox.id = task.id
+        checkbox.checked = task.complete
+        const label = taskElement.querySelector('label')
+        label.htmmlFor = task.id
+        label.append(task.name)
+        tasksContainer.appendChild(taskElement)
+    })
+}
+
+function renderTaskCount(selectedList){
     const incompleteTasksCount = selectedList.tasks.filter(task => !task.complete).length
     const taskString = incompleteTasksCount === 1 ? "task" : "tasks"
     listCountElement.innerText = `${incompleteTasksCount} ${taskString} left`
@@ -86,6 +102,8 @@ function renderLists() {
         listsContainer.appendChild(listElement) 
     }) 
 }
+
+
 // Clears any existing inputs
 function clearElement(element){
     while(element.firstChild){
@@ -94,3 +112,14 @@ function clearElement(element){
 }
 
 render()
+
+
+/*
+let tasks = []
+function renderTasks(){
+    clearElement(tasksContainer)
+    tasks.forEach(task =>{
+        const taskElement = document.createElement('label')
+    })
+
+} */
