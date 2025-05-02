@@ -2,16 +2,11 @@ const listsContainer = document.querySelector('[data-lists]')
 const newListForm = document.querySelector('[data-new-list-form]')
 const newListInput = document.querySelector('[data-new-list-input]')
 
-let lists = [{
-        id: 1,
-        name: 'todo1'
-},  {
-        id: 2,
-        name: 'todo2'
-}]
+const LOCAL_STORAGE_LIST_KEY = 'task.lists'
+let lists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || []
 
 
-
+//Caters for the functionality of the input field
 newListForm.addEventListener('submit', e => {
     e.preventDefault() //prevents the form from submitting when you press Enter, since it refreshes the page
     const listName = newListInput.value
@@ -19,7 +14,7 @@ newListForm.addEventListener('submit', e => {
     const list = createList(listName)
     newListInput.value = null
     lists.push(list)
-    render()
+    saveAndRender()
 })
 
 function createList(name){
@@ -27,6 +22,15 @@ function createList(name){
     
 }
 
+function saveAndRender(){
+    save()
+    render()
+}
+//Saves list to local storage for retrieval after refereshing
+function save(){
+    localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(lists))
+
+}
 // Creates a new list entry based on the data from the lists array above
 function render() {
     clearElement(listsContainer)
@@ -45,5 +49,5 @@ function clearElement(element){
         element.removeChild(element.firstChild)
     }
 }
-console.log(lists)
+
 render()
