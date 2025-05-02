@@ -7,6 +7,8 @@ const listTitleElement = document.querySelector('[data-list-title]')
 const listCountElement = document.querySelector('[data-list-count]')
 const tasksContainer = document.querySelector('[data-tasks]')
 const taskTemplate = document.getElementById('task-template')
+const newTaskForm = document.querySelector('[data-new-task-form]')
+const newTaskInput = document.querySelector('[data-new-task-input]')
 
 const LOCAL_STORAGE_LIST_KEY = 'task.lists'
 const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.SelectedListId'
@@ -26,7 +28,7 @@ deleteListButtton.addEventListener('click', e =>{
     saveAndRender()
 } )
 
-//Caters for the functionality of the input field
+//Caters for the functionality of the input field for LIst Items
 newListForm.addEventListener('submit', e => {
     e.preventDefault() //prevents the form from submitting when you press Enter, since it refreshes the page
     const listName = newListInput.value
@@ -37,10 +39,26 @@ newListForm.addEventListener('submit', e => {
     saveAndRender()
 })
 
+//Handles Input for tasks
+newTaskForm.addEventListener('submit', e => {
+    e.preventDefault() //prevents the form from submitting when you press Enter, since it refreshes the page
+    const taskName = newTaskInput.value
+    if (taskName == null || taskName === '') return
+    const task = createTask(taskName)
+    newTaskInput.value = null
+    const selectedList = lists.find(list => list.id === selectedListId)
+    selectedList.tasks.push(task)
+    saveAndRender()
+})
+
 function createList(name){
-    return {id: Date.now().toString(), name: name, tasks: []}
-    
+    return {id: Date.now().toString(), name: name, tasks: []} 
 }
+function createTask(name){
+    return {id: Date.now().toString(), name: name, complete: true} 
+}
+
+
 
 function saveAndRender(){
     save()
@@ -78,7 +96,7 @@ function renderTasks(selectedList){
         checkbox.id = task.id
         checkbox.checked = task.complete
         const label = taskElement.querySelector('label')
-        label.htmmlFor = task.id
+        label.htmlFor = task.id
         label.append(task.name)
         tasksContainer.appendChild(taskElement)
     })
