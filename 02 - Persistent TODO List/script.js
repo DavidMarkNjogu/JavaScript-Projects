@@ -1,6 +1,7 @@
 const listsContainer = document.querySelector('[data-lists]')
 const newListForm = document.querySelector('[data-new-list-form]')
 const newListInput = document.querySelector('[data-new-list-input]')
+const deleteListButtton = document.querySelector('[data-delete-list-button]') 
 
 const LOCAL_STORAGE_LIST_KEY = 'task.lists'
 const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.SelectedListId'
@@ -13,6 +14,13 @@ listsContainer.addEventListener('click', e => {
         saveAndRender()
     }
 })
+
+deleteListButtton.addEventListener('click', e =>{
+    lists = lists.filter(list => list.id !== selectedListId)
+    selectedListId = null
+    saveAndRender()
+} )
+
 //Caters for the functionality of the input field
 newListForm.addEventListener('submit', e => {
     e.preventDefault() //prevents the form from submitting when you press Enter, since it refreshes the page
@@ -38,8 +46,8 @@ function save(){
     localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(lists))
     localStorage.setItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY, selectedListId)
 
-
 }
+
 // Creates a new list entry based on the data from the lists array above
 function render() {
     clearElement(listsContainer)
