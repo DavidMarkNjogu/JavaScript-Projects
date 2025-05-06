@@ -2,7 +2,8 @@
     --clr-primary: rgb(54, 112, 199);
     --clr-light: #f4f4f4;
     --clr-dark: #333;
-    --clr-warning: rgb(99, 36, 36);
+    --clr-warning: #ef4444;
+    --radius: 0.5rem;
   }
   
   *,
@@ -98,19 +99,19 @@
   }
   
   .new::-webkit-input-placeholder {
-    opacity: 0.4;
+    color: rgba(255, 255, 255, 0.6);
   }
   
   .new:-ms-input-placeholder {
-    opacity: 0.4;
+    color: rgba(255, 255, 255, 0.6);
   }
   
   .new::-ms-input-placeholder {
-    opacity: 0.4;
+    color: rgba(255, 255, 255, 0.6);
   }
   
   .new::placeholder {
-    opacity: 0.4;
+    color: rgba(255, 255, 255, 0.6);
   }
   
   .new:focus {
@@ -141,6 +142,9 @@
     margin-bottom: 0;
   }
   
+  .new.task::placeholder{
+    color: rgba(0, 0, 0, 0.6);
+  }
   .active-list {
     font-weight: 700;
   }
@@ -269,7 +273,25 @@
     position: absolute;
     width: 100%;
     left: 0;
-    bottom: -35px;
+    bottom: -50px;
+    padding: 25px 0 15px;
+    margin-top: 20px;
     color: var(--clr-light);
   }
   
+
+  .btn.delete {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    background: rgba(12, 11, 11, 0.952);
+    transition: all 200ms ease;
+    opacity: 0.8;
+    margin-top: 30px;
+  }
+  
+  .btn.delete:hover {
+    background: var(--clr-warning);
+    color: var(--clr-light);
+    opacity: 1;
+  }
